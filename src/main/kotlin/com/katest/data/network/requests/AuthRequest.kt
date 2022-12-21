@@ -1,4 +1,4 @@
-package com.katest.data.requests
+package com.katest.data.network.requests
 
 import kotlinx.serialization.Serializable
 

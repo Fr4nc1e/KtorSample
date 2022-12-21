@@ -1,4 +1,4 @@
-package com.katest.data.model
+package com.katest.data.model.user
 
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq

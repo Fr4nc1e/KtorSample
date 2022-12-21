@@ -1,13 +1,19 @@
 package com.katest
 
-import com.katest.data.model.MongoUserDataSource
+import com.katest.data.model.user.MongoUserDataSource
 import com.katest.plugins.*
 import com.katest.security.hashing.SHA256HashingService
 import com.katest.security.token.JwtTokenService
 import com.katest.security.token.TokenConfig
+import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
+import io.ktor.server.websocket.*
+import io.ktor.websocket.*
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
+import java.time.Duration
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
@@ -31,6 +37,13 @@ fun Application.module() {
     )
     val hashingService = SHA256HashingService()
 
+    install(WebSockets) {
+        pingPeriod = Duration.ofSeconds(15)
+        timeout = Duration.ofSeconds(15)
+        maxFrameSize = Long.MAX_VALUE
+        masking = false
+    }
+
     configureSecurity(tokenConfig)
     configureMonitoring()
     configureSerialization()
@@ -40,4 +53,5 @@ fun Application.module() {
         tokenService,
         tokenConfig
     )
+    configureSessions()
 }

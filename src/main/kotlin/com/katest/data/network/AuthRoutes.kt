@@ -1,10 +1,9 @@
-package com.katest.authroute
+package com.katest.data.network
 
-import com.katest.authroute.authenticate
-import com.katest.data.model.User
-import com.katest.data.model.UserDataSource
-import com.katest.data.requests.AuthRequest
-import com.katest.data.response.AuthResponse
+import com.katest.data.model.user.User
+import com.katest.data.model.user.UserDataSource
+import com.katest.data.network.requests.AuthRequest
+import com.katest.data.network.response.AuthResponse
 import com.katest.security.hashing.HashingService
 import com.katest.security.hashing.SaltedHash
 import com.katest.security.token.TokenClaim
@@ -30,7 +29,8 @@ fun Route.signUp(
 
         val areFieldsBlank = request.userName.isBlank() || request.passWd.isBlank()
         val isPassWdTooShort = request.passWd.length < 8
-        if (areFieldsBlank || isPassWdTooShort) {
+        val isUserNameUsed = request.userName == userDataSource.getUserByUserName(userName = request.userName)?.userName
+        if (areFieldsBlank || isPassWdTooShort || isUserNameUsed) {
             call.respond(HttpStatusCode.Conflict)
             return@post
         }

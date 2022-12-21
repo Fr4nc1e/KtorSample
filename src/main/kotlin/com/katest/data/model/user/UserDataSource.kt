@@ -1,4 +1,6 @@
-package com.katest.data.model
+package com.katest.data.model.user
+
+import com.katest.data.model.user.User
 
 interface UserDataSource {
 
